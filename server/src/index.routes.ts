@@ -3,12 +3,12 @@ import { FastifyInstance } from 'fastify';
 // Fonction pour enregistrer toutes les routes
 export default async function registerRoutes(server: FastifyInstance, prefix: string = '/api') {
   // Route de test pour vérifier que le serveur fonctionne
-  server.get('/', async (request, reply) => {
+  server.get('/', async (_request, _reply) => {
     return { status: 'ok', message: 'API Remisage fonctionne correctement' };
   });
 
   // Route de santé pour les vérifications
-  server.get(`${prefix}/health`, async (request, reply) => {
+  server.get(`${prefix}/health`, async (_request, _reply) => {
     return { status: 'ok', environment: process.env.NODE_ENV };
   });
 
@@ -58,7 +58,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer le profil utilisateur
-  server.get(`${prefix}/users/profile`, async (request, reply) => {
+  server.get(`${prefix}/users/profile`, async (_request, reply) => {
     try {
       // Simuler un profil utilisateur pour le déploiement
       return {
@@ -75,7 +75,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer tous les véhicules
-  server.get(`${prefix}/vehicles`, async (request, reply) => {
+  server.get(`${prefix}/vehicles`, async (_request, reply) => {
     try {
       // Simuler une liste de véhicules pour le déploiement
       return [
@@ -110,7 +110,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer toutes les demandes
-  server.get(`${prefix}/requests`, async (request, reply) => {
+  server.get(`${prefix}/requests`, async (_request, reply) => {
     try {
       // Simuler une liste de demandes pour le déploiement
       return [];
@@ -121,7 +121,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer tous les messages
-  server.get(`${prefix}/messages`, async (request, reply) => {
+  server.get(`${prefix}/messages`, async (_request, reply) => {
     try {
       // Simuler une liste de messages pour le déploiement
       return [];
@@ -132,7 +132,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer toutes les notifications
-  server.get(`${prefix}/notifications`, async (request, reply) => {
+  server.get(`${prefix}/notifications`, async (_request, reply) => {
     try {
       // Simuler une liste de notifications pour le déploiement
       return [];
