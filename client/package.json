@@ -1,45 +1,50 @@
 {
-  "name": "remisage-server",
+  "name": "remisage-client",
   "version": "0.1.0",
-  "description": "Fastify server for Remisage application with Sanity.io",
-  "main": "src/index.ts",
-  "scripts": {
-    "start": "ts-node -r dotenv/config src/index.ts",
-    "dev": "cross-env NODE_ENV=development nodemon --exec \"ts-node -r dotenv/config\" src/index.ts",
-    "build": "tsc",
-    "prod": "cross-env NODE_ENV=production node dist/index.js",
-    "postbuild": "cp .env dist/ || copy .env dist\\",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test-auth": "ts-node -r dotenv/config src/utils/testAuth.ts",
-    "migrate-to-sanity": "ts-node -r dotenv/config src/utils/migrateToSanity.ts",
-    "generate-sanity-token": "ts-node src/utils/generateSanityToken.ts",
-    "test-sanity": "ts-node -r dotenv/config src/utils/testSanityConnection.ts",
-    "test-sanity-api": "ts-node -r dotenv/config src/utils/testSanityAPI.ts",
-    "check-mysql-refs": "ts-node src/utils/checkMySQLReferences.ts",
-    "clean-deps": "ts-node src/utils/cleanDependencies.ts"
-  },
+  "private": true,
   "dependencies": {
-    "@fastify/compress": "^6.5.0",
-    "@fastify/cors": "^8.5.0",
-    "@fastify/jwt": "^7.2.4",
-    "@fastify/swagger": "^8.14.0",
-    "@fastify/swagger-ui": "^3.0.0",
-    "@sanity/client": "^6.28.3",
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.9",
-    "bcrypt": "^5.1.1",
-    "dotenv": "^16.4.7",
-    "fastify": "^4.29.0",
-    "fastify-plugin": "^4.5.1",
-    "jsonwebtoken": "^9.0.2"
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.0",
+    "@mui/material": "^5.14.0",
+    "@react-google-maps/api": "^2.20.6",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "axios": "^1.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
   },
-  "devDependencies": {
-    "@sanity/cli": "^3.78.1",
-    "@types/node": "^20.5.0",
-    "cross-env": "^7.0.3",
-    "nodemon": "^3.0.1",
-    "pino-pretty": "^10.3.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
