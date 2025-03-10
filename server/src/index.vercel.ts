@@ -4,6 +4,7 @@ import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import registerRoutes from './index.routes';
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -68,15 +69,8 @@ server.register(swaggerUi, {
   routePrefix: '/documentation'
 });
 
-// Route de test pour vérifier que le serveur fonctionne
-server.get('/', async (request, reply) => {
-  return { status: 'ok', message: 'API Remisage fonctionne correctement' };
-});
-
-// Route de santé pour les vérifications
-server.get('/api/health', async (request, reply) => {
-  return { status: 'ok', environment: process.env.NODE_ENV };
-});
+// Enregistrer les routes simplifiées
+registerRoutes(server);
 
 // Fonction de démarrage du serveur
 const start = async () => {
