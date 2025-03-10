@@ -1,7 +1,5 @@
 import Fastify, { FastifyRequest, FastifyReply } from 'fastify';
 import dotenv from 'dotenv';
-import { join } from 'path';
-import autoload from '@fastify/autoload';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import swagger from '@fastify/swagger';
@@ -37,7 +35,10 @@ server.decorateRequest('user', null);
 server.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     // Vérifier si la route nécessite une authentification
-    if (request.routerPath === '/api/auth/login' || request.routerPath === '/api/auth/register') {
+    if (request.routerPath === '/api/auth/login' || 
+        request.routerPath === '/api/auth/register' ||
+        request.routerPath === '/' ||
+        request.routerPath === '/api/health') {
       return;
     }
 
@@ -67,10 +68,14 @@ server.register(swaggerUi, {
   routePrefix: '/documentation'
 });
 
-// Charger les routes
-server.register(autoload, {
-  dir: join(__dirname, 'routes'),
-  options: { prefix: '/api' }
+// Route de test pour vérifier que le serveur fonctionne
+server.get('/', async (request, reply) => {
+  return { status: 'ok', message: 'API Remisage fonctionne correctement' };
+});
+
+// Route de santé pour les vérifications
+server.get('/api/health', async (request, reply) => {
+  return { status: 'ok', environment: process.env.NODE_ENV };
 });
 
 // Fonction de démarrage du serveur
