@@ -1,0 +1,124 @@
+📘 Cahier des Charges – Application de Gestion des Véhicules Assignés
+🏢 1. Présentation du Projet
+1.1 Contexte et Objectifs
+De nombreuses entreprises utilisent un système de remisage à domicile pour leurs véhicules professionnels. Cependant, la gestion de l’assignation des véhicules et la communication entre employés et administrateurs restent souvent complexes et peu optimisées.
+L’objectif de cette application est de simplifier et fluidifier l’organisation des véhicules assignés en permettant :
+Aux employés de consulter leur véhicule assigné, d’effectuer des demandes de modification et de signaler des incidents.
+Aux administrateurs d’organiser efficacement l’attribution des véhicules, de gérer les demandes et d’optimiser la flotte.
+1.2 Bénéfices attendus
+✅ Réduction des erreurs d’assignation de véhicules.
+✅ Gain de temps dans la gestion des demandes et réclamations.
+✅ Amélioration de la communication entre employés et administrateurs.
+✅ Optimisation de l’utilisation des véhicules de l’entreprise.
+
+🛠 2. Fonctionnalités et Spécifications Techniques
+2.1 Fonctionnalités principales
+🔹 Gestion des utilisateurs
+Inscription et authentification sécurisée.
+Rôles : Employé et Administrateur.
+🔹 Messagerie interne
+Communication directe entre employés et administrateurs.
+🔹 Gestion des véhicules
+Consultation du véhicule assigné.
+Historique de la localisation du vehicule
+Notifications en cas de changement de véhicule.
+🔹 Demandes et signalements
+Formulaire de réclamation (problème avec un véhicule, retard, incident…).
+Demande de modification d’heure de remisage.
+Demande de)
+🔹 Géolocalisation et gestion d’adresse
+Affichage et modification de l’adresse de remisage via Google Maps.
+Modification de la localisation du véhicule (adresse et pointeur google maps) qui sera limité à deux tentatives mensuelle pour les employés (limite modifiable par l’administrateur
+🔹 Bouton d’urgence
+Appel direct à un numéro d’urgence prédéfini.
+🔹 Notifications en temps réel
+Alerte en cas de modification d’assignation.
+
+🏗 3. Architecture et Technologies
+3.1 Plateformes cibles
+Web (développement en priorité).
+Android & iOS (prévu pour une future version).
+3.2 Technologies utilisées
+✅ Stack MERN (MongoDB remplacé par MySQL)
+Frontend : React.js
+Backend : Node.js + Express.js
+Base de données : MySQL
+✅ Technologies mobiles futures
+React Native pour Android & iOS.
+✅ Services et APIs
+Google Maps API pour l’affichage et la modification des adresses de remisage.
+
+🎨 4. Expérience Utilisateur (UX/UI)
+4.1 Interface Employé
+Utilisation de MUI
+Dashboard simple et intuitif.
+Accès rapide aux informations du véhicule assigné.
+Bouton d’urgence facilement accessible.
+Interface de messagerie claire et fluide.
+Formulaires de demande et de réclamation ergonomiques.
+Notifications en temps réel sur le véhicule, les demandes et les messages
+4.2 Interface Administrateur
+Gestion centralisée des véhicules et des assignations.
+Consultation des demandes et réclamations des employés.
+Système de notifications pour informer les utilisateurs.
+Gestion des adresses de remisage et des horaires.
+
+🔄 5. Schéma de Fonctionnement
+📌 Flux d’informations :
+Connexion de l’utilisateur (employé ou administrateur).
+Consultation des véhicules assignés via une interface dédiée.
+Gestion des demandes et modifications d’assignation.
+Notifications envoyées en cas de modification ou alerte d’urgence.
+Mises à jour des adresses via Google Maps.
+Un schéma graphique pourra être ajouté pour illustrer le fonctionnement.
+
+⏳ 6. Déploiement et Hébergement
+Serveur Backend : Hébergé sur AWS, DigitalOcean ou un VPS selon les besoins.
+Base de données : MySQL sur un serveur dédié ou cloud (ex. Amazon RDS).
+Frontend Web : Hébergé sur Vercel, Netlify ou un serveur dédié.
+Applications mobiles : Hébergement sur Google Play et App Store une fois développées.
+
+📅 7. Planning de Développement
+Phase
+Tâches
+Durée estimée
+Phase 1
+Définition du cahier des charges et conception UX/UI
+2 semaines
+Phase 2
+Développement backend (API + Base de données)
+4 semaines
+Phase 3
+Développement frontend Web
+4 semaines
+Phase 4
+Tests et corrections
+3 semaines
+Phase 5
+Déploiement et mise en production
+2 semaines
+Phase 6
+Développement mobile (Android & iOS)
+À planifier ultérieurement
+
+
+📜 8. Contraintes et Sécurité
+8.1 Contraintes techniques
+Compatibilité Web et futurs développements Android & iOS.
+Intégration de Google Maps API.
+Système de notifications en temps réel.
+8.2 Sécurité
+🔐 Authentification sécurisée (JWT, OAuth).
+🔐 Protection des données (chiffrement des mots de passe, connexion HTTPS).
+🔐 Gestion des accès selon les rôles (Employé / Administrateur).
+
+💰 9. Budget et Ressources
+Développement (freelance ou équipe interne).
+Hébergement et API Google Maps (coût à prévoir selon utilisation).
+Maintenance et support après lancement.
+
+📌 10. Conclusion
+Ce cahier des charges définit les bases du développement de l’application en mettant l’accent sur l’optimisation de la gestion des véhicules assignés, la communication entre utilisateurs et l’expérience utilisateur fluide.
+L’application est pensée pour évoluer avec des mises à jour futures (intégration mobile, nouvelles fonctionnalités).
+🎯 Prochaine étape : Validation du cahier des charges et lancement du développement ! 🚀
+

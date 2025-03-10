@@ -1,0 +1,45 @@
+{
+  "name": "remisage-server",
+  "version": "0.1.0",
+  "description": "Fastify server for Remisage application with Sanity.io",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node -r dotenv/config src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --exec \"ts-node -r dotenv/config\" src/index.ts",
+    "build": "tsc",
+    "prod": "cross-env NODE_ENV=production node dist/index.js",
+    "postbuild": "cp .env dist/ || copy .env dist\\",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-auth": "ts-node -r dotenv/config src/utils/testAuth.ts",
+    "migrate-to-sanity": "ts-node -r dotenv/config src/utils/migrateToSanity.ts",
+    "generate-sanity-token": "ts-node src/utils/generateSanityToken.ts",
+    "test-sanity": "ts-node -r dotenv/config src/utils/testSanityConnection.ts",
+    "test-sanity-api": "ts-node -r dotenv/config src/utils/testSanityAPI.ts",
+    "check-mysql-refs": "ts-node src/utils/checkMySQLReferences.ts",
+    "clean-deps": "ts-node src/utils/cleanDependencies.ts"
+  },
+  "dependencies": {
+    "@fastify/compress": "^6.5.0",
+    "@fastify/cors": "^8.5.0",
+    "@fastify/jwt": "^7.2.4",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^3.0.0",
+    "@sanity/client": "^6.28.3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "fastify": "^4.29.0",
+    "fastify-plugin": "^4.5.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@sanity/cli": "^3.78.1",
+    "@types/node": "^20.5.0",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^10.3.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
