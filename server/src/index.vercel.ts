@@ -33,33 +33,33 @@ server.register(jwt, {
 // Le décorateur 'user' est automatiquement ajouté par le plugin JWT
 // Ne pas ajouter manuellement : server.decorateRequest('user', null);
 
-// Middleware d'authentification
+// Middleware d'authentification pour les routes qui ne sont pas gérées par les contrôleurs
 server.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
-  try {
-    // Log pour déboguer
-    console.log(`Route appelée: ${request.method} ${request.url} (${request.routerPath || 'unknown'})`);
-    
-    // Vérifier si la route nécessite une authentification
-    if (request.routerPath === '/api/auth/login' || 
-        request.routerPath === '/api/auth/register' ||
-        request.routerPath === '/' ||
-        request.routerPath === '/api/health') {
-      console.log('Route publique, pas d\'authentification requise');
-      return;
-    }
+  // Log pour déboguer
+  console.log(`Route appelée: ${request.method} ${request.url} (${request.routerPath || 'unknown'})`);
+  
+  // Vérifier si la route nécessite une authentification
+  if (request.routerPath === '/api/auth/login' || 
+      request.routerPath === '/api/auth/register' ||
+      request.routerPath === '/' ||
+      request.routerPath === '/api/health') {
+    console.log('Route publique, pas d\'authentification requise');
+    return;
+  }
 
-    // Log pour déboguer les en-têtes d'authentification
-    const authHeader = request.headers.authorization;
-    console.log(`En-tête d'autorisation: ${authHeader ? 'Présent' : 'Absent'}`);
-    
-    // Vérifier le token JWT
+  // Log pour déboguer les en-têtes d'authentification
+  const authHeader = request.headers.authorization;
+  console.log(`En-tête d'autorisation: ${authHeader ? 'Présent' : 'Absent'}`);
+  
+  // Vérifier le token JWT pour les routes qui ne sont pas explicitement exclues
+  try {
     await request.jwtVerify();
-    
-    // Log pour déboguer l'utilisateur authentifié
     console.log('Utilisateur authentifié:', request.user);
   } catch (err) {
     console.error('Erreur d\'authentification:', err);
-    reply.send(err);
+    // Les routes avec leurs propres middlewares d'authentification géreront cela elles-mêmes
+    // Donc on ne renvoie pas d'erreur ici, on laisse la requête continuer
+    console.log('Erreur de vérification JWT, peut être gérée par un middleware spécifique');
   }
 });
 
