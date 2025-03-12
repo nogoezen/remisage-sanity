@@ -3,12 +3,12 @@ import { FastifyInstance } from 'fastify';
 // Fonction pour enregistrer toutes les routes
 export default async function registerRoutes(server: FastifyInstance, prefix: string = '/api') {
   // Route de test pour vérifier que le serveur fonctionne
-  server.get('/', async (request, reply) => {
+  server.get('/', async (_request, _reply) => {
     return { status: 'ok', message: 'API Remisage fonctionne correctement' };
   });
 
   // Route de santé pour les vérifications
-  server.get(`${prefix}/health`, async (request, reply) => {
+  server.get(`${prefix}/health`, async (_request, _reply) => {
     return { status: 'ok', environment: process.env.NODE_ENV };
   });
 
@@ -58,7 +58,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer le profil utilisateur
-  server.get(`${prefix}/users/profile`, async (request, reply) => {
+  server.get(`${prefix}/users/profile`, async (_request, reply) => {
     try {
       // Simuler un profil utilisateur pour le déploiement
       return {
@@ -75,34 +75,10 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer tous les véhicules
-  server.get(`${prefix}/vehicles`, async (request, reply) => {
+  server.get(`${prefix}/vehicles`, async (_request, reply) => {
     try {
       // Simuler une liste de véhicules pour le déploiement
-      return [
-        {
-          id: 1,
-          model: 'Renault Clio',
-          licensePlate: 'AA-123-BB',
-          status: 'available',
-          address: '1 Rue de Paris, 75001 Paris',
-          latitude: 48.8566,
-          longitude: 2.3522,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          id: 2,
-          model: 'Peugeot 308',
-          licensePlate: 'CC-456-DD',
-          status: 'assigned',
-          assignedTo: 2,
-          address: '2 Avenue des Champs-Élysées, 75008 Paris',
-          latitude: 48.8698,
-          longitude: 2.3075,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      ];
+      return [];
     } catch (error) {
       console.error('Erreur lors de la récupération des véhicules:', error);
       return reply.status(500).send({ error: 'Erreur lors de la récupération des véhicules' });
@@ -110,7 +86,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer toutes les demandes
-  server.get(`${prefix}/requests`, async (request, reply) => {
+  server.get(`${prefix}/requests`, async (_request, reply) => {
     try {
       // Simuler une liste de demandes pour le déploiement
       return [];
@@ -121,7 +97,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer tous les messages
-  server.get(`${prefix}/messages`, async (request, reply) => {
+  server.get(`${prefix}/messages`, async (_request, reply) => {
     try {
       // Simuler une liste de messages pour le déploiement
       return [];
@@ -132,7 +108,7 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
   });
 
   // Route pour récupérer toutes les notifications
-  server.get(`${prefix}/notifications`, async (request, reply) => {
+  server.get(`${prefix}/notifications`, async (_request, reply) => {
     try {
       // Simuler une liste de notifications pour le déploiement
       return [];

@@ -125,7 +125,7 @@ export default async function (fastify: FastifyInstance) {
         const { senderId, receiverId, subject, content } = request.body;
         
         // Verify that the sender is the current user
-        if (senderId !== request.user.id) {
+        if (Number(senderId) !== Number(request.user.id)) {
           return reply.code(403).send({ error: 'You can only send messages as yourself' });
         }
         
@@ -173,8 +173,8 @@ export default async function (fastify: FastifyInstance) {
           return reply.code(404).send({ error: 'Message not found' });
         }
         
-        if (message.receiverId !== request.user.id) {
-          return reply.code(403).send({ error: 'You can only update messages sent to you' });
+        if (String(message.senderId) !== String(request.user.id)) {
+          return reply.status(403).send({ error: 'Vous n\'êtes pas autorisé à modifier ce message' });
         }
         
         // Build update query

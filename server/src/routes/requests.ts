@@ -70,7 +70,7 @@ export default async function (fastify: FastifyInstance) {
         const { userId } = request.params;
         
         // Verify that the user is requesting their own data or is an admin
-        if (request.user.id !== parseInt(userId) && request.user.role !== 'admin') {
+        if (Number(request.user.id) !== Number(userId) && request.user.role !== 'admin') {
           return reply.code(403).send({ error: 'Access denied' });
         }
         
@@ -142,7 +142,7 @@ export default async function (fastify: FastifyInstance) {
         const { userId, type, details, vehicleId, requestedDate } = request.body;
         
         // Verify that the user is creating a request for themselves
-        if (userId !== request.user.id) {
+        if (Number(userId) !== Number(request.user.id)) {
           return reply.code(403).send({ error: 'You can only create requests for yourself' });
         }
         

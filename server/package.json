@@ -7,6 +7,7 @@
     "start": "ts-node -r dotenv/config src/index.ts",
     "dev": "cross-env NODE_ENV=development nodemon --exec \"ts-node -r dotenv/config\" src/index.ts",
     "build": "tsc",
+    "build:vercel": "tsc --project tsconfig.vercel.json",
     "prod": "cross-env NODE_ENV=production node dist/index.js",
     "postbuild": "cp .env dist/ || copy .env dist\\",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,7 +18,7 @@
     "test-sanity-api": "ts-node -r dotenv/config src/utils/testSanityAPI.ts",
     "check-mysql-refs": "ts-node src/utils/checkMySQLReferences.ts",
     "clean-deps": "ts-node src/utils/cleanDependencies.ts",
-    "vercel-build": "tsc"
+    "vercel-build": "tsc --project tsconfig.vercel.json"
   },
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
