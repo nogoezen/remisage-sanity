@@ -19,7 +19,8 @@ const server = Fastify({
 server.register(cors, {
   origin: [
     process.env.CLIENT_URL || 'http://localhost:3000',
-    'https://remisage-client.vercel.app' // Ajoutez l'URL de votre frontend déployé
+    'https://remisage-client.vercel.app', // Ajoutez l'URL de votre frontend déployé
+    'https://remisage-sanity.vercel.app' // URL actuelle du client
   ],
   credentials: true
 });
