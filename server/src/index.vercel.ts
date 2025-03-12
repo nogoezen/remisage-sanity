@@ -30,8 +30,8 @@ server.register(jwt, {
   secret: process.env.JWT_SECRET || 'supersecret'
 });
 
-// Décorateur pour l'utilisateur authentifié
-server.decorateRequest('user', null);
+// Le décorateur 'user' est automatiquement ajouté par le plugin JWT
+// Ne pas ajouter manuellement : server.decorateRequest('user', null);
 
 // Middleware d'authentification
 server.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
