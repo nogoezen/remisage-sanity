@@ -82,7 +82,7 @@ server.register(swaggerUi, {
   routePrefix: '/documentation'
 });
 
-// Enregistrer les routes simplifiées
+// Enregistrer les routes avec les contrôleurs Sanity
 registerRoutes(server);
 
 // Fonction de démarrage du serveur
