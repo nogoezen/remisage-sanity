@@ -36,17 +36,29 @@ server.register(jwt, {
 // Middleware d'authentification
 server.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
   try {
+    // Log pour déboguer
+    console.log(`Route appelée: ${request.method} ${request.url} (${request.routerPath || 'unknown'})`);
+    
     // Vérifier si la route nécessite une authentification
     if (request.routerPath === '/api/auth/login' || 
         request.routerPath === '/api/auth/register' ||
         request.routerPath === '/' ||
         request.routerPath === '/api/health') {
+      console.log('Route publique, pas d\'authentification requise');
       return;
     }
 
+    // Log pour déboguer les en-têtes d'authentification
+    const authHeader = request.headers.authorization;
+    console.log(`En-tête d'autorisation: ${authHeader ? 'Présent' : 'Absent'}`);
+    
     // Vérifier le token JWT
     await request.jwtVerify();
+    
+    // Log pour déboguer l'utilisateur authentifié
+    console.log('Utilisateur authentifié:', request.user);
   } catch (err) {
+    console.error('Erreur d\'authentification:', err);
     reply.send(err);
   }
 });
