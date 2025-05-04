@@ -1,4 +1,11 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { 
+  UserController, 
+  VehicleController, 
+  MessageController, 
+  RequestController, 
+  NotificationController 
+} from './controllers';
 
 // Fonction pour enregistrer toutes les routes
 export default async function registerRoutes(server: FastifyInstance, prefix: string = '/api') {
@@ -12,133 +19,207 @@ export default async function registerRoutes(server: FastifyInstance, prefix: st
     return { status: 'ok', environment: process.env.NODE_ENV };
   });
 
+  // Ajouter les décorateurs nécessaires pour les routes
+  server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
+  });
+
+  server.decorate('requireAdmin', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+      if (request.user.role !== 'admin') {
+        return reply.code(403).send({ error: 'Admin access required' });
+      }
+    } catch (err) {
+      reply.send(err);
+    }
+  });
+
   // Routes d'authentification
-  server.post(`${prefix}/auth/login`, async (request, reply) => {
-    try {
-      const { email, password } = request.body as { email: string; password: string };
-      
-      // Vérification des paramètres
-      if (!email || !password) {
-        return reply.status(400).send({ error: 'Email et mot de passe requis' });
-      }
+  server.post(`${prefix}/auth/register`, UserController.register);
+  server.post(`${prefix}/auth/login`, UserController.login);
 
-      // Simuler une connexion réussie pour le déploiement
-      if (email === 'admin@remisage.com' && password === 'admin123') {
-        return {
-          token: 'token_simulé_pour_déploiement',
-          user: {
-            id: 1,
-            firstName: 'Admin',
-            lastName: 'Test',
-            email: 'admin@remisage.com',
-            role: 'admin'
-          }
-        };
-      }
-
-      // Simuler une connexion réussie pour le déploiement
-      if (email === 'employee@remisage.com' && password === 'employee123') {
-        return {
-          token: 'token_simulé_pour_déploiement',
-          user: {
-            id: 2,
-            firstName: 'Employee',
-            lastName: 'Test',
-            email: 'employee@remisage.com',
-            role: 'employee'
-          }
-        };
-      }
-
-      return reply.status(401).send({ error: 'Email ou mot de passe incorrect' });
-    } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la connexion' });
-    }
+  // Routes utilisateurs
+  server.get(`${prefix}/users/profile`, {
+    onRequest: [server.authenticate],
+    handler: UserController.getProfile
+  });
+  
+  server.put(`${prefix}/users/profile`, {
+    onRequest: [server.authenticate],
+    handler: UserController.updateProfile
+  });
+  
+  server.get(`${prefix}/users`, {
+    onRequest: [server.requireAdmin],
+    handler: UserController.getAllUsers
+  });
+  
+  server.delete(`${prefix}/users/:id`, {
+    onRequest: [server.requireAdmin],
+    handler: UserController.deleteUser
+  });
+  
+  server.put(`${prefix}/users/:id/vehicle-assignment`, {
+    onRequest: [server.authenticate],
+    handler: UserController.updateVehicleAssignmentStatus
   });
 
-  // Route pour récupérer le profil utilisateur
-  server.get(`${prefix}/users/profile`, async (_request, reply) => {
-    try {
-      // Simuler un profil utilisateur pour le déploiement
-      return {
-        id: 1,
-        firstName: 'Admin',
-        lastName: 'Test',
-        email: 'admin@remisage.com',
-        role: 'admin'
-      };
-    } catch (error) {
-      console.error('Erreur lors de la récupération du profil:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la récupération du profil' });
-    }
+  // Routes véhicules
+  server.post(`${prefix}/vehicles`, {
+    onRequest: [server.requireAdmin],
+    handler: VehicleController.createVehicle
+  });
+  
+  server.get(`${prefix}/vehicles/:id`, {
+    onRequest: [server.authenticate],
+    handler: VehicleController.getVehicle
+  });
+  
+  server.put(`${prefix}/vehicles/:id`, {
+    onRequest: [server.requireAdmin],
+    handler: VehicleController.updateVehicle
+  });
+  
+  server.delete(`${prefix}/vehicles/:id`, {
+    onRequest: [server.requireAdmin],
+    handler: VehicleController.deleteVehicle
+  });
+  
+  server.get(`${prefix}/vehicles`, {
+    onRequest: [server.authenticate],
+    handler: VehicleController.getAllVehicles
+  });
+  
+  server.put(`${prefix}/vehicles/:id/location`, {
+    onRequest: [server.authenticate],
+    handler: VehicleController.updateLocation
+  });
+  
+  server.get(`${prefix}/vehicles/:id/location-history`, {
+    onRequest: [server.authenticate],
+    handler: VehicleController.getLocationHistory
+  });
+  
+  server.post(`${prefix}/vehicles/:id/assign`, {
+    onRequest: [server.requireAdmin],
+    handler: VehicleController.assignToUser
   });
 
-  // Route pour récupérer tous les véhicules
-  server.get(`${prefix}/vehicles`, async (_request, reply) => {
-    try {
-      // Simuler une liste de véhicules pour le déploiement
-      return [
-        {
-          id: 1,
-          model: 'Renault Clio',
-          licensePlate: 'AA-123-BB',
-          status: 'available',
-          address: '1 Rue de Paris, 75001 Paris',
-          latitude: 48.8566,
-          longitude: 2.3522,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          id: 2,
-          model: 'Peugeot 308',
-          licensePlate: 'CC-456-DD',
-          status: 'assigned',
-          assignedTo: 2,
-          address: '2 Avenue des Champs-Élysées, 75008 Paris',
-          latitude: 48.8698,
-          longitude: 2.3075,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      ];
-    } catch (error) {
-      console.error('Erreur lors de la récupération des véhicules:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la récupération des véhicules' });
-    }
+  // Routes messages
+  server.post(`${prefix}/messages`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.sendMessage
+  });
+  
+  server.get(`${prefix}/messages/:id`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.getMessage
+  });
+  
+  server.get(`${prefix}/messages`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.getUserMessages
+  });
+  
+  server.put(`${prefix}/messages/:id`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.updateMessage
+  });
+  
+  server.put(`${prefix}/messages/:id/archive`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.archiveMessage
+  });
+  
+  server.put(`${prefix}/messages/:id/unarchive`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.unarchiveMessage
+  });
+  
+  server.delete(`${prefix}/messages/:id`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.deleteMessage
+  });
+  
+  server.get(`${prefix}/messages/unread/count`, {
+    onRequest: [server.authenticate],
+    handler: MessageController.getUnreadCount
   });
 
-  // Route pour récupérer toutes les demandes
-  server.get(`${prefix}/requests`, async (_request, reply) => {
-    try {
-      // Simuler une liste de demandes pour le déploiement
-      return [];
-    } catch (error) {
-      console.error('Erreur lors de la récupération des demandes:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la récupération des demandes' });
-    }
+  // Routes demandes
+  server.post(`${prefix}/requests`, {
+    onRequest: [server.authenticate],
+    handler: RequestController.createRequest
+  });
+  
+  server.get(`${prefix}/requests/:id`, {
+    onRequest: [server.authenticate],
+    handler: RequestController.getRequest
+  });
+  
+  server.get(`${prefix}/requests/user`, {
+    onRequest: [server.authenticate],
+    handler: RequestController.getUserRequests
+  });
+  
+  server.get(`${prefix}/requests`, {
+    onRequest: [server.authenticate],
+    handler: RequestController.getAllRequests
+  });
+  
+  server.put(`${prefix}/requests/:id/status`, {
+    onRequest: [server.requireAdmin],
+    handler: RequestController.updateRequestStatus
+  });
+  
+  server.delete(`${prefix}/requests/:id`, {
+    onRequest: [server.authenticate],
+    handler: RequestController.deleteRequest
+  });
+  
+  server.get(`${prefix}/requests/stats`, {
+    onRequest: [server.requireAdmin],
+    handler: RequestController.getRequestStats
   });
 
-  // Route pour récupérer tous les messages
-  server.get(`${prefix}/messages`, async (_request, reply) => {
-    try {
-      // Simuler une liste de messages pour le déploiement
-      return [];
-    } catch (error) {
-      console.error('Erreur lors de la récupération des messages:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la récupération des messages' });
-    }
+  // Routes notifications
+  server.get(`${prefix}/notifications`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.getUserNotifications
   });
-
-  // Route pour récupérer toutes les notifications
-  server.get(`${prefix}/notifications`, async (_request, reply) => {
-    try {
-      // Simuler une liste de notifications pour le déploiement
-      return [];
-    } catch (error) {
-      console.error('Erreur lors de la récupération des notifications:', error);
-      return reply.status(500).send({ error: 'Erreur lors de la récupération des notifications' });
-    }
+  
+  server.get(`${prefix}/notifications/:id`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.getNotification
+  });
+  
+  server.put(`${prefix}/notifications/:id/read`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.markAsRead
+  });
+  
+  server.put(`${prefix}/notifications/read-all`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.markAllAsRead
+  });
+  
+  server.delete(`${prefix}/notifications/:id`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.deleteNotification
+  });
+  
+  server.delete(`${prefix}/notifications`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.deleteAllNotifications
+  });
+  
+  server.get(`${prefix}/notifications/unread/count`, {
+    onRequest: [server.authenticate],
+    handler: NotificationController.getUnreadCount
   });
 } 

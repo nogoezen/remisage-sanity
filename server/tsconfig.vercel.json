@@ -13,13 +13,8 @@
     "resolveJsonModule": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noEmitOnError": false,
-    "allowJs": true,
-    "checkJs": false,
-    "noFallthroughCasesInSwitch": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "ignoreDeprecations": "5.0"
+    "noEmitOnError": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts", "src/utils/migrateToSanity.ts"]
+  "exclude": ["node_modules", "**/*.test.ts", "src/utils/migrateToSanity.ts", "src/utils/testSanityConnection.ts", "src/utils/testSanityAPI.ts", "src/utils/generateSanityToken.ts", "src/utils/checkMySQLReferences.ts", "src/utils/cleanDependencies.ts"]
 } 

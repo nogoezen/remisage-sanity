@@ -2,14 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/src/index.vercel.js",
-      "use": "@vercel/node"
+      "src": "src/index.vercel.ts",
+      "use": "@vercel/node",
+      "config": {
+        "tsconfigPath": "tsconfig.vercel.json"
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/src/index.vercel.js"
+      "dest": "src/index.vercel.ts"
     }
   ],
   "env": {

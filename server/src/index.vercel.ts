@@ -19,7 +19,8 @@ const server = Fastify({
 server.register(cors, {
   origin: [
     process.env.CLIENT_URL || 'http://localhost:3000',
-    'https://remisage-client.vercel.app' // Ajoutez l'URL de votre frontend déployé
+    'https://remisage-client.vercel.app', // Ajoutez l'URL de votre frontend déployé
+    'https://remisage-sanity.vercel.app' // URL actuelle du client
   ],
   credentials: true
 });
@@ -29,24 +30,36 @@ server.register(jwt, {
   secret: process.env.JWT_SECRET || 'supersecret'
 });
 
-// Décorateur pour l'utilisateur authentifié
-server.decorateRequest('user', null);
+// Le décorateur 'user' est automatiquement ajouté par le plugin JWT
+// Ne pas ajouter manuellement : server.decorateRequest('user', null);
 
-// Middleware d'authentification
+// Middleware d'authentification pour les routes qui ne sont pas gérées par les contrôleurs
 server.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
-  try {
-    // Vérifier si la route nécessite une authentification
-    if (request.routerPath === '/api/auth/login' || 
-        request.routerPath === '/api/auth/register' ||
-        request.routerPath === '/' ||
-        request.routerPath === '/api/health') {
-      return;
-    }
+  // Log pour déboguer
+  console.log(`Route appelée: ${request.method} ${request.url} (${request.routerPath || 'unknown'})`);
+  
+  // Vérifier si la route nécessite une authentification
+  if (request.routerPath === '/api/auth/login' || 
+      request.routerPath === '/api/auth/register' ||
+      request.routerPath === '/' ||
+      request.routerPath === '/api/health') {
+    console.log('Route publique, pas d\'authentification requise');
+    return;
+  }
 
-    // Vérifier le token JWT
+  // Log pour déboguer les en-têtes d'authentification
+  const authHeader = request.headers.authorization;
+  console.log(`En-tête d'autorisation: ${authHeader ? 'Présent' : 'Absent'}`);
+  
+  // Vérifier le token JWT pour les routes qui ne sont pas explicitement exclues
+  try {
     await request.jwtVerify();
+    console.log('Utilisateur authentifié:', request.user);
   } catch (err) {
-    reply.send(err);
+    console.error('Erreur d\'authentification:', err);
+    // Les routes avec leurs propres middlewares d'authentification géreront cela elles-mêmes
+    // Donc on ne renvoie pas d'erreur ici, on laisse la requête continuer
+    console.log('Erreur de vérification JWT, peut être gérée par un middleware spécifique');
   }
 });
 
@@ -69,7 +82,7 @@ server.register(swaggerUi, {
   routePrefix: '/documentation'
 });
 
-// Enregistrer les routes simplifiées
+// Enregistrer les routes avec les contrôleurs Sanity
 registerRoutes(server);
 
 // Fonction de démarrage du serveur

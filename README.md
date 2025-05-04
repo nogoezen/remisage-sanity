@@ -39,7 +39,7 @@ Remisage est une application web moderne permettant de gérer l'assignation des 
 - **Runtime** : Node.js
 - **Framework** : Fastify pour des performances optimales
 - **Authentification** : JWT (JSON Web Tokens)
-- **Base de données** : MySQL
+- **Base de données** : Sanity.io (CMS headless)
 - **API** : RESTful avec documentation Swagger
 
 ## Structure du projet
@@ -60,7 +60,7 @@ client/
 ```
 server/
 ├── src/
-│   ├── config/        # Configuration (base de données, serveur)
+│   ├── config/        # Configuration (Sanity, serveur)
 │   ├── controllers/   # Contrôleurs (logique métier)
 │   ├── models/        # Modèles de données
 │   ├── plugins/       # Plugins Fastify
@@ -72,7 +72,7 @@ server/
 
 ### Prérequis
 - Node.js (v14+)
-- MySQL (v8+)
+- Compte Sanity.io
 - npm ou yarn
 
 ### Installation
@@ -93,9 +93,14 @@ server/
    npm install
    ```
 
-3. Configurer la base de données
-   - Créer une base de données MySQL
-   - Configurer les variables d'environnement dans `.env`
+3. Configurer Sanity.io
+   - Créer un projet Sanity.io
+   - Configurer les variables d'environnement dans `.env`:
+     ```
+     SANITY_PROJECT_ID=votre_project_id
+     SANITY_DATASET=production
+     SANITY_TOKEN=votre_token
+     ```
 
 4. Démarrer l'application
    ```bash
@@ -151,13 +156,24 @@ server/
 - Material-UI 5+
 - Node.js 14+
 - Fastify 3+
-- MySQL 8+
+- Sanity.io
 
 ### Bonnes pratiques
 - Code TypeScript fortement typé
 - Architecture modulaire et extensible
 - Gestion d'état centralisée
 - Logging détaillé pour le débogage
+
+## Migration de MySQL vers Sanity.io
+
+L'application a été migrée de MySQL vers Sanity.io pour bénéficier des avantages suivants:
+
+- **Flexibilité du schéma** : Facilité d'évolution du modèle de données
+- **API puissante** : Requêtes GROQ pour des recherches avancées
+- **Interface d'administration** : Gestion des contenus via le Studio Sanity
+- **Hébergement cloud** : Pas besoin de gérer une base de données
+
+Les modèles de données ont été adaptés pour utiliser Sanity.io, avec des références entre documents pour les relations (ex: véhicules assignés aux utilisateurs).
 
 ## Contribution
 Les contributions sont les bienvenues ! N'hésitez pas à soumettre des pull requests ou à signaler des problèmes via les issues GitHub.
